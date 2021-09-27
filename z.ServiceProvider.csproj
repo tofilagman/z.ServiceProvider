@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>tofilagman</Authors>
     <RepositoryUrl>https://github.com/tofilagman/z.ServiceProvider</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild> 
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
