@@ -8,30 +8,48 @@ namespace z.ServiceProvider
     public class HttpContextServiceProviderProxy : IServiceProviderProxy
     {
         private readonly IHttpContextAccessor contextAccessor;
+        private readonly IServiceProvider serviceProvider;
 
-        public HttpContextServiceProviderProxy(IHttpContextAccessor contextAccessor)
+        public HttpContextServiceProviderProxy(IHttpContextAccessor contextAccessor, IServiceProvider serviceProvider)
         {
             this.contextAccessor = contextAccessor;
+            this.serviceProvider = serviceProvider;
         }
 
         public T GetService<T>()
         {
-            return contextAccessor.HttpContext.RequestServices.GetService<T>();
+            var context = contextAccessor.HttpContext;
+            if (context == null)
+                return serviceProvider.GetService<T>();
+            var services = context.RequestServices ?? serviceProvider;
+            return services.GetService<T>();
         }
 
         public IEnumerable<T> GetServices<T>()
         {
-            return contextAccessor.HttpContext.RequestServices.GetServices<T>();
+            var service = contextAccessor.HttpContext?.RequestServices.GetServices<T>();
+            if (service == null)
+                return serviceProvider.GetServices<T>();
+            return service;
         }
 
         public object GetService(Type type)
-        {
-            return contextAccessor.HttpContext.RequestServices.GetService(type);
+        { 
+            var context = contextAccessor.HttpContext;
+            if (context == null)
+                return serviceProvider.GetService(type);
+            var services = context.RequestServices ?? serviceProvider;
+            return services.GetService(type);
         }
 
         public IEnumerable<object> GetServices(Type type)
         {
-            return contextAccessor.HttpContext.RequestServices.GetServices(type);
+            var service = contextAccessor.HttpContext?.RequestServices.GetServices(type);
+            if (service == null)
+                return serviceProvider.GetServices(type);
+            return service;
         }
+
+        
     }
 }
